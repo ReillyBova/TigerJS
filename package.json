@@ -1,0 +1,36 @@
+{
+  "name": "tiger-js",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "format": "prettier --write '*.js' '*.jsx' 'src/**/*.js' 'src/**/*.jsx'",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@material-ui/core": "latest",
+    "clsx": "^1.0.4",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-scripts": "latest",
+    "resize-observer-polyfill": "^1.5.1",
+    "three": "^0.111.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.19.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
