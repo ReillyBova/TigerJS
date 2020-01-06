@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import ResizeObserver from 'resize-observer-polyfill';
 
 function ThreeContainer() {
     const ref = useRef();
 
     useEffect(() => {
         const scene = new THREE.Scene();
-        const [width, height] = [ref.current.parentElement.clientWidth, ref.current.parentElement.clientHeight];
+        const [width, height] = [
+            ref.current.parentElement.clientWidth,
+            ref.current.parentElement.clientHeight,
+        ];
         const camera = new THREE.PerspectiveCamera(
             75,
             width / height,
@@ -32,19 +34,27 @@ function ThreeContainer() {
         };
         animate();
 
-        const ro = new ResizeObserver((entries) => {
-            if (entries.length < 1) {
+        function handleResize() {
+            if (!ref || !ref.current || !ref.current.parentElement) {
                 return;
             }
-            const {width, height} = entries[0].contentRect;
-            camera.aspect = width / height;
+
+            const { clientWidth, clientHeight } = ref.current.parentElement;
+            camera.aspect = clientWidth / clientHeight;
             camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        });
-        ro.observe(ref.current.parentElement);
+            renderer.setSize(clientWidth, clientHeight);
+        }
+
+        window.addEventListener('resize', handleResize, false);
+        handleResize();
+
+        // Cleanup event handlers on unmount
+        return function cleanup() {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
-    return <div style={{position: 'absolute'}} ref={ref} />;
+    return <div style={{ position: 'absolute' }} ref={ref} />;
 }
 
 export default ThreeContainer;

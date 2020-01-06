@@ -17,7 +17,7 @@ module.exports = {
         },
         sourceType: 'module',
     },
-    plugins: ['react'],
+    plugins: ['react', 'react-hooks'],
     extends: ['eslint:recommended', 'plugin:react/recommended'],
     rules: {
         'arrow-spacing': 'error',
@@ -45,6 +45,7 @@ module.exports = {
         'space-before-blocks': 'error',
         'space-before-function-paren': ['error', 'never'],
         'space-in-parens': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
         'react/display-name': 'off',
         'react/prop-types': 'off',
     },
