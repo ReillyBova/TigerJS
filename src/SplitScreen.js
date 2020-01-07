@@ -117,10 +117,11 @@ const setScreenWidths = (
                     // Normal case, where flexGrow = pixel width
                     ref.current.style.flexGrow = newFlex;
                     triggeredReflow = true;
+
                     if (widthCache) {
                         delete ref.current.widthCache;
                     }
-                } else if (widthCache) {
+                } else if (widthCache && isRefresh) {
                     // This screen was just hidden; need to adjust its size
                     let totalFluidPixels = 0;
                     screenWidths.forEach((width, j) => {
@@ -128,7 +129,7 @@ const setScreenWidths = (
                             totalFluidPixels += width;
                         }
                     });
-                    if (totalFluidPixels === 0) {
+                    if (totalFluidPixels <= 0) {
                         // This is the only fluid screen, so it can be large
                         ref.current.style.flexGrow = computeWindowWidth();
                     } else if (widthCache >= 1) {
@@ -161,8 +162,9 @@ const setScreenWidths = (
                             totalFluidPixels += width;
                         }
                     });
+                    totalFluidPixels -= DIV_WIDTH;
 
-                    if (totalFluidPixels === 0) {
+                    if (totalFluidPixels <= 0) {
                         ref.current.widthCache = 1;
                     } else {
                         ref.current.widthCache = Math.max(
@@ -397,7 +399,7 @@ export default function SplitScreen({ children, emptyMessage }) {
             return;
         }
 
-        // Measure initial screen widths
+        // Measure width of screens
         let screenWidths = computeScreenWidths(screenRefs.current);
 
         /*
@@ -445,7 +447,7 @@ export default function SplitScreen({ children, emptyMessage }) {
                     } else {
                         return width * fixedScaleFactor;
                     }
-                } else if (isFluidCompressed && width === 0) {
+                } else if (isFluidCompressed && (width === 0) && !screenRefs.current[i].current.widthCache) {
                     // These screens were compressed to zero, so rescale up
                     return winWidth;
                 }
@@ -463,6 +465,18 @@ export default function SplitScreen({ children, emptyMessage }) {
             true,
             fixedOnly
         );
+
+        // Refresh with second pass if necessary
+        if (!fixedOnly) {
+            screenWidths = computeScreenWidths(screenRefs.current);
+            setScreenWidths(
+                screenRefs.current,
+                screenWidths,
+                resizeBehaviors,
+                false,
+                fixedOnly
+            );
+        }
 
         // Trigger a window resize event
         window.dispatchEvent(new Event('resize'));
