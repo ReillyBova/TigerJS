@@ -83,7 +83,6 @@ const setScreenWidths = (
     isRefresh,
     fixedOnly
 ) => {
-
     // Boolean to keep track if we need to rerender or not
     let triggeredReflow = false;
 
@@ -106,7 +105,9 @@ const setScreenWidths = (
             } else {
                 // If visible and FLUID
                 const newFlex = screenWidths[i].toFixed(1);
-                const oldFlex = parseFloat(ref.current.style.flexGrow).toFixed(1);
+                const oldFlex = parseFloat(ref.current.style.flexGrow).toFixed(
+                    1
+                );
                 const widthCache = ref.current.widthCache;
 
                 // Only rerender if necessary
@@ -137,12 +138,12 @@ const setScreenWidths = (
                         ref.current.style.flexGrow = totalFluidPixels;
                     } else {
                         /*
-                        * Maintain the percentage of fluid pixels this screen
-                        * used before it disappeared: ratio = me/(Total + me).
-                        *
-                        * Total = totalFluidPixels, ratio = widthCache.
-                        * Solve for me.
-                        */
+                         * Maintain the percentage of fluid pixels this screen
+                         * used before it disappeared: ratio = me/(Total + me).
+                         *
+                         * Total = totalFluidPixels, ratio = widthCache.
+                         * Solve for me.
+                         */
                         ref.current.style.flexGrow =
                             (totalFluidPixels * widthCache) /
                             (1.0 - widthCache);
@@ -255,9 +256,9 @@ export default function SplitScreen({ children, emptyMessage }) {
             const targetX = e.clientX;
 
             /*
-            * Find the divider position, determine the adjacent panes, and
-            * check if at least one visible screen is fluid (i.e. not fixed)
-            */
+             * Find the divider position, determine the adjacent panes, and
+             * check if at least one visible screen is fluid (i.e. not fixed)
+             */
             let currentX = -DIV_WIDTH / 2.0;
             let prevPane = 0;
             let nextPane = screens.length - 1;
@@ -343,8 +344,11 @@ export default function SplitScreen({ children, emptyMessage }) {
             } else {
                 // If all screens are fixed, need to rescale to percentages
                 const fixedPercentages = screenWidths.map((width, i) => {
-                    if (resizeBehaviors[i].isVisible && resizeBehaviors[i].isFixed) {
-                        return width / winWidth * 100.0;
+                    if (
+                        resizeBehaviors[i].isVisible &&
+                        resizeBehaviors[i].isFixed
+                    ) {
+                        return (width / winWidth) * 100.0;
                     } else {
                         return width;
                     }
@@ -361,9 +365,9 @@ export default function SplitScreen({ children, emptyMessage }) {
             }
 
             /*
-            * If triggeredReflow is true, we adjust a column; let children know
-            * their size changed by sending a window resize event
-            */
+             * If triggeredReflow is true, we adjust a column; let children know
+             * their size changed by sending a window resize event
+             */
             if (triggeredReflow) {
                 window.dispatchEvent(new Event('resize'));
             }
@@ -403,10 +407,10 @@ export default function SplitScreen({ children, emptyMessage }) {
         let screenWidths = computeScreenWidths(screenRefs.current);
 
         /*
-        * Determine how much of the window is taken up by the fixed screens.
-        * Also, check if there are any visible fluid screens (i.e. not fixed)
-        * at all.
-        */
+         * Determine how much of the window is taken up by the fixed screens.
+         * Also, check if there are any visible fluid screens (i.e. not fixed)
+         * at all.
+         */
         const winWidth = computeWindowWidth();
         let totalFixedPixels = 0;
         let fixedOnly = true;
@@ -419,12 +423,12 @@ export default function SplitScreen({ children, emptyMessage }) {
         });
 
         /*
-        * If there is too much fixed space allocated, fixed screens must be
-        * scaled down. If all screens are fixed, fixed screens must be scaled
-        * exactly to the width of the screen. If fixed screens would eat up all
-        * the space of fluid screens, reallocate 10% of the window for the fluid
-        * screens.
-        */
+         * If there is too much fixed space allocated, fixed screens must be
+         * scaled down. If all screens are fixed, fixed screens must be scaled
+         * exactly to the width of the screen. If fixed screens would eat up all
+         * the space of fluid screens, reallocate 10% of the window for the fluid
+         * screens.
+         */
         let fixedScaleFactor = 1.0;
         let isFluidCompressed = false;
         if (totalFixedPixels > winWidth || fixedOnly) {
@@ -447,7 +451,11 @@ export default function SplitScreen({ children, emptyMessage }) {
                     } else {
                         return width * fixedScaleFactor;
                     }
-                } else if (isFluidCompressed && (width === 0) && !screenRefs.current[i].current.widthCache) {
+                } else if (
+                    isFluidCompressed &&
+                    width === 0 &&
+                    !screenRefs.current[i].current.widthCache
+                ) {
                     // These screens were compressed to zero, so rescale up
                     return winWidth;
                 }
@@ -537,18 +545,15 @@ export default function SplitScreen({ children, emptyMessage }) {
                     </Fragment>
                 );
             })}
-            {!isPaneVisible &&
-                <Container className={classes.noScreens} maxWidth={"sm"}>
+            {!isPaneVisible && (
+                <Container className={classes.noScreens} maxWidth='sm'>
                     <Box my={4}>
-                        <Typography
-                            variant="h4"
-                            component="h1"
-                        >
+                        <Typography variant='h4' component='h1'>
                             {emptyMessage}
                         </Typography>
                     </Box>
                 </Container>
-            }
+            )}
         </div>
     );
 }

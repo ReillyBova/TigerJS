@@ -1,10 +1,12 @@
 // Library imports
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 // Project imports
 import TabPanel from './TabPanel';
+import Draggable from 'react-draggable';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import Card from '@material-ui/core/Card';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SwipeableViews from 'react-swipeable-views';
@@ -21,11 +23,27 @@ function accessibilityProps(index) {
 }
 
 // Styling for the side panel
-const sidePanelStyles = makeStyles((theme) => ({
+const sidePanelStyles = makeStyles(() => ({
     // Wrapper for the panel
     root: {
-        backgroundColor: theme.palette.background.paper,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         minWidth: 200,
+    },
+    // panelTabs have fixed height
+    panelTabs: {
+        flexGrow: 0,
+    },
+    panelBody: {
+        position: 'relative',
+        flexGrow: 1,
+        '&>div': {
+            position: 'absolute',
+            overflowY: 'scroll',
+            height: '100%',
+            width: '100%',
+        },
     },
     // Allow for smaller buttons
     tabButton: {
@@ -34,7 +52,7 @@ const sidePanelStyles = makeStyles((theme) => ({
 }));
 
 // Panel on the side of the screen to manage components and properties
-export default function SidePanel() {
+export default memo(function SidePanel() {
     // CSS classes for styling
     const classes = sidePanelStyles();
 
@@ -89,14 +107,19 @@ export default function SidePanel() {
     // Render the side panel in a tabbed layout
     return (
         <div ref={ref} className={classes.root}>
-            <AppBar position="static" color="default">
+            <AppBar
+                className={classes.panelTabs}
+                component='div'
+                position='static'
+                color='default'
+            >
                 <Tabs
                     value={value}
                     onChange={handleChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    variant="fullWidth"
-                    aria-label="side-panel"
+                    indicatorColor='primary'
+                    textColor='primary'
+                    variant='fullWidth'
+                    aria-label='side-panel'
                 >
                     <Tooltip title={layout ? '' : 'Components'}>
                         <Tab
@@ -117,12 +140,15 @@ export default function SidePanel() {
                 </Tabs>
             </AppBar>
             <SwipeableViews
-                axis={'x'}
+                axis='x'
                 index={value}
                 onChangeIndex={handleChangeIndex}
+                className={classes.panelBody}
             >
                 <TabPanel value={value} index={0} spacing={spacing}>
-                    Item One
+                    <Draggable>
+                        <Card>Item One</Card>
+                    </Draggable>
                 </TabPanel>
                 <TabPanel value={value} index={1} spacing={spacing}>
                     Item Two
@@ -130,4 +156,4 @@ export default function SidePanel() {
             </SwipeableViews>
         </div>
     );
-}
+});

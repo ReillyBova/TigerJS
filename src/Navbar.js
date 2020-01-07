@@ -35,7 +35,7 @@ export default function Navbar({
     setViz,
     setControl,
     setSide,
-    canDisablePanels
+    canDisablePanels,
 }) {
     // CSS classes for styling
     const classes = navStyles();
@@ -52,15 +52,15 @@ export default function Navbar({
     // Render the Navbar and buttons
     return (
         <div className={classes.root}>
-            <AppBar position={"static"}>
+            <AppBar position='static'>
                 <Toolbar>
-                    <Typography variant={"h6"} className={classes.title}>
+                    <Typography variant='h6' className={classes.title}>
                         {'TigerJS'}
                     </Typography>
                     <Tooltip title={titleTooltip(showViz, 'Visualization')}>
                         <IconButton
                             onClick={() => setViz(!showViz)}
-                            aria-label={"toggle-visualization-panel"}
+                            aria-label='toggle-visualization-panel'
                             disabled={showViz && !canDisablePanels}
                         >
                             {showViz ? <CubeFilledIcon /> : <CubeOutlineIcon />}
@@ -69,7 +69,7 @@ export default function Navbar({
                     <Tooltip title={titleTooltip(showControl, 'Control Panel')}>
                         <IconButton
                             onClick={() => setControl(!showControl)}
-                            aria-label={"toggle-control-panel"}
+                            aria-label='toggle-control-panel'
                             disabled={showControl && !canDisablePanels}
                         >
                             {showControl ? (
@@ -82,9 +82,9 @@ export default function Navbar({
                     <Tooltip title={titleTooltip(showSide, 'Side Panel')}>
                         <IconButton
                             onClick={() => setSide(!showSide)}
-                            aria-label={"toggle-side-panel"}
+                            aria-label='toggle-side-panel'
                             disabled={showSide && !canDisablePanels}
-                            edge={"end"}
+                            edge='end'
                         >
                             {showSide ? (
                                 <WrenchFilledIcon />

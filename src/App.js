@@ -48,7 +48,7 @@ export default function App() {
     }
 
     // We cannot disable any more panels when there is only one left
-    const canDisablePanels = (activePanelCount > 1);
+    const canDisablePanels = activePanelCount > 1;
 
     // Function to ensure there is always one panel active
     const setStateFilter = (state, setState) => {
@@ -76,10 +76,8 @@ export default function App() {
             />
             <div className={classes.stretchToBottom}>
                 <SplitScreen
-                    emptyMessage={
-                        `Hmmm...   it looks like something went wrong!
-                        Use Navbar to toggle a panel back into view :P`
-                    }
+                    emptyMessage={`Hmmm...   it looks like something went wrong!
+                        Use Navbar to toggle a panel back into view :P`}
                 >
                     <ThreeContainer
                         splitScreenIsHidden={!showViz}
@@ -90,12 +88,12 @@ export default function App() {
                         splitScreenIsHidden={!showControl}
                         splitScreenSetState={toggleControl}
                         splitScreenMinShrink={0}
-                        maxWidth="sm"
+                        maxWidth='sm'
                     >
                         <Box my={4}>
                             <Typography
-                                variant="h4"
-                                component="h1"
+                                variant='h4'
+                                component='h1'
                                 gutterBottom
                             >
                                 Flow Panel
@@ -105,7 +103,7 @@ export default function App() {
                     <SidePanel
                         splitScreenIsHidden={!showSide}
                         splitScreenSetState={toggleSide}
-                        splitScreenBehavior={'fixed'}
+                        splitScreenBehavior='fixed'
                         splitScreenMinShrink={200}
                     />
                 </SplitScreen>
