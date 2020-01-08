@@ -1,7 +1,7 @@
 // Library imports
 import React from 'react';
 // Project imports
-import { SitemapOutlineIcon } from 'components';
+import { SitemapOutline as SitemapOutlineIcon } from 'components';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
