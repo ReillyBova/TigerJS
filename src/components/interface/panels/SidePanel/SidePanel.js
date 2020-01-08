@@ -1,8 +1,8 @@
 // Library imports
 import React, { useEffect, useRef, memo } from 'react';
-// Project imports
-import TabPanel from './TabPanel';
 import Draggable from 'react-draggable';
+// Project imports
+import { TabPanel } from 'components';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';

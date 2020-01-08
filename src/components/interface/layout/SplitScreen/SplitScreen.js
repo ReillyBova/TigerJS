@@ -2,7 +2,7 @@
 import React, { Fragment, createRef, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 // Project imports
-import { computeWindowWidth } from './utils.js';
+import { computeWindowWidth } from 'utils';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';

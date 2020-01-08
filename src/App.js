@@ -1,10 +1,8 @@
 // Library imports
 import React, { useState } from 'react';
 // Project imports
-import Navbar from './Navbar';
-import SplitScreen from './SplitScreen';
+import { Navbar, SidePanel, SplitScreen } from 'components';
 import ThreeContainer from './ThreeContainer';
-import SidePanel from './SidePanel';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
