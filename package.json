@@ -1,11 +1,13 @@
 {
   "name": "tiger-js",
   "version": "0.0.1",
+  "homepage" : "https://ReillyBova.github.io/TigerJS/",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "format": "prettier --write '*.js' '*.jsx' 'src/**/*.js' 'src/**/*.jsx'",
+    "deploy": "npm run build && gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -24,6 +26,7 @@
     "three": "^0.111.0"
   },
   "devDependencies": {
+    "gh-pages": "^2.2.0",
     "prettier": "^1.19.1",
     "redux-devtools": "^3.5.0"
   },
