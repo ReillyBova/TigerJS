@@ -1,8 +1,11 @@
 // Library imports
 import React, { useEffect, useRef, memo } from 'react';
+import { useSelector } from 'react-redux';
 import Draggable from 'react-draggable';
 // Project imports
 import { TabPanel } from 'components';
+import { actionCreators } from 'flux';
+import { useActions } from 'utils';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,6 +16,9 @@ import SwipeableViews from 'react-swipeable-views';
 import TuneIcon from '@material-ui/icons/Tune';
 import ToolboxIcon from 'mdi-material-ui/Toolbox';
 import Tooltip from '@material-ui/core/Tooltip';
+
+// Extract relevant actionCreators
+const { setSidePanelTabIndex } = actionCreators;
 
 // Computes the accessibility labels for the side panel
 function accessibilityProps(index) {
@@ -88,17 +94,25 @@ export default memo(function SidePanel() {
         };
     }, []);
 
-    // Value is the index of the current active tab
-    const [value, setValue] = React.useState(0);
+    // Retrieve properties from the global state
+    const sidePanelFluxState = useSelector(
+        (state) => state.user_interface.sidePanel
+    );
+
+    // ActiveIndex is the index of the tab currently in view
+    const [activeIndex, setActiveIndex] = [
+        sidePanelFluxState.activeTabIndex,
+        useActions(setSidePanelTabIndex),
+    ];
 
     // Helper function to set active tab on tab click
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setActiveIndex(newValue);
     };
 
     // Helper function to set active tab on view swipe
     const handleChangeIndex = (index) => {
-        setValue(index);
+        setActiveIndex(index);
     };
 
     // Spacing passed to tab panels depends on layout
@@ -114,7 +128,7 @@ export default memo(function SidePanel() {
                 color='default'
             >
                 <Tabs
-                    value={value}
+                    value={activeIndex}
                     onChange={handleChange}
                     indicatorColor='primary'
                     textColor='primary'
@@ -141,16 +155,16 @@ export default memo(function SidePanel() {
             </AppBar>
             <SwipeableViews
                 axis='x'
-                index={value}
+                index={activeIndex}
                 onChangeIndex={handleChangeIndex}
                 className={classes.panelBody}
             >
-                <TabPanel value={value} index={0} spacing={spacing}>
+                <TabPanel value={activeIndex} index={0} spacing={spacing}>
                     <Draggable>
                         <Card>Item One</Card>
                     </Draggable>
                 </TabPanel>
-                <TabPanel value={value} index={1} spacing={spacing}>
+                <TabPanel value={activeIndex} index={1} spacing={spacing}>
                     Item Two
                 </TabPanel>
             </SwipeableViews>

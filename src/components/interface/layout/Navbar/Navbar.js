@@ -1,7 +1,5 @@
 // Library imports
 import React from 'react';
-// Project imports
-import { SitemapOutline as SitemapOutlineIcon } from 'components';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CubeFilledIcon from 'mdi-material-ui/Cube';
 import CubeOutlineIcon from 'mdi-material-ui/CubeOutline';
 import SitemapFilledIcon from 'mdi-material-ui/Sitemap';
+import { SitemapOutline as SitemapOutlineIcon } from 'components';
 import WrenchFilledIcon from 'mdi-material-ui/Wrench';
 import WrenchOutlineIcon from 'mdi-material-ui/WrenchOutline';
 
