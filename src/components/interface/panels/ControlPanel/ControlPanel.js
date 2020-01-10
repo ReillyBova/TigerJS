@@ -21,6 +21,12 @@ const sidePanelStyles = makeStyles((theme) => ({
         height: '100%',
         width: '100%',
     },
+    scrollWrapper: {
+        position: 'relative',
+        overflow: 'scroll',
+        height: '100%',
+        width: '100%',
+    },
     outline: {
         border: `2px solid ${theme.palette.secondary.main}`,
     },
@@ -187,26 +193,28 @@ export default memo(function ControlPanel() {
             className={clsx(classes.root, draggedOver ? classes.outline : classes.noOutline)}
         >
         </div>
-        <Container ref={containerRef} style={{position: 'absolute'}}>
-            <Box my={4}>
-                <Typography variant='h4' component='h1' gutterBottom>
-                    Control Panel
-                </Typography>
-            </Box>
-            { Object.entries(kiddies).map(([id, draggable], i) => (
-                <div key={id} ref={el => boxRefs.current[i] = el} style={{zIndex: 1, display: 'inline-block', position: 'absolute', left: draggable.x, top: draggable.y}}>
-                    <Card
-                        onMouseDown={(e) =>
-                            onMouseDownHandler(e, id, i, draggable.color)
-                        }
-                        style={{
-                            backgroundColor: draggable.color,
-                        }}
-                        className={classes.test}
-                    />
-                </div>
-            ))}
-        </Container>
+        <div className={classes.scrollWrapper}>
+            <Container ref={containerRef} style={{position: 'absolute'}}>
+                <Box my={4}>
+                    <Typography variant='h4' component='h1' gutterBottom>
+                        Control Panel
+                    </Typography>
+                </Box>
+                { Object.entries(kiddies).map(([id, draggable], i) => (
+                    <div key={id} ref={el => boxRefs.current[i] = el} style={{zIndex: 1, display: 'inline-block', position: 'absolute', left: draggable.x, top: draggable.y}}>
+                        <Card
+                            onMouseDown={(e) =>
+                                onMouseDownHandler(e, id, i, draggable.color)
+                            }
+                            style={{
+                                backgroundColor: draggable.color,
+                            }}
+                            className={classes.test}
+                        />
+                    </div>
+                ))}
+            </Container>
+        </div>
         </React.Fragment>
     );
 });
