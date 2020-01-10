@@ -17,6 +17,7 @@ function ThreeContainer() {
             1000
         );
         const renderer = new THREE.WebGLRenderer();
+        renderer.domElement.style.display = 'block';
         renderer.setSize(width, height);
         // document.body.appendChild( renderer.domElement );
         // use ref as a mount point of the Three.js scene instead of the document.body

@@ -4,41 +4,39 @@ import { bindActionCreators, combineReducers } from 'redux';
 import { useDispatch } from 'react-redux';
 
 /*
- * Merge an array of modules each of the form { propertyName, reducer, ...actions}
- * into a single set of (combined) reducers and actionCreators.
+ * Merge an array of modules each of the form
+ * { propertyName, reducer, middleware, actionCreators}
+ * into a single set of (combined-)reducers, middleware, and actionCreators.
  */
-export const combineReducersAndActionCreators = (statelets) => {
-    // Merge the reducers and actionCreators into one object and one list, respectively
-    const [allReducers, allActionCreators] = statelets.reduce(
-        ([prevReducers, prevActionCreators], statelet) => {
+export const combineStatelets = (statelets) => {
+    // Merge the objects into one object
+    const [allReducers, allMiddleware, allActionCreators] = statelets.reduce(
+        ([prevReducers, prevMiddleware, prevActionCreators], statelet) => {
             // Extract properties from the statelet
-            const {
-                propertyName,
-                reducer,
-                actionCreators,
-                ...actions
-            } = statelet;
+            const { propertyName, reducer, middleware, actionCreators } = statelet;
 
             // Merge the reducer, giving it the key defined by ${propertyName}.
             const nextReducers = { ...prevReducers, [propertyName]: reducer };
 
+            // Merge the middleware
+            const nextMiddleware = [ ...prevMiddleware, ...(middleware? middleware : []) ];
+
             // Merge the actions via a simple spread
             const nextActionCreators = {
                 ...prevActionCreators,
-                ...actionCreators,
-                ...actions,
+                ...(actionCreators? actionCreators : {}),
             };
 
-            return [nextReducers, nextActionCreators];
+            return [nextReducers, nextMiddleware, nextActionCreators];
         },
-        [{}, {}]
+        [{}, [], {}]
     );
 
     // Combine the reducers via redux
     const reducer = combineReducers(allReducers);
 
-    // Return the combined reducer and the list of actions
-    return [reducer, allActionCreators];
+    // Return the combined reducer, middleware, and actionCreators
+    return [reducer, allMiddleware, allActionCreators];
 };
 
 /*

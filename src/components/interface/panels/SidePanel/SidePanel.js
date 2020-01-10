@@ -1,11 +1,10 @@
 // Library imports
 import React, { useEffect, useRef, memo } from 'react';
 import { useSelector } from 'react-redux';
-import Draggable from 'react-draggable';
 // Project imports
 import { TabPanel } from 'components';
 import { actionCreators } from 'flux';
-import { useActions } from 'utils';
+import { isLeftMouseClick, useActions } from 'utils';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,7 +17,7 @@ import ToolboxIcon from 'mdi-material-ui/Toolbox';
 import Tooltip from '@material-ui/core/Tooltip';
 
 // Extract relevant actionCreators
-const { setSidePanelTabIndex } = actionCreators;
+const { acSetSidePanelTabIndex, acStartDrag } = actionCreators;
 
 // Computes the accessibility labels for the side panel
 function accessibilityProps(index) {
@@ -29,7 +28,7 @@ function accessibilityProps(index) {
 }
 
 // Styling for the side panel
-const sidePanelStyles = makeStyles(() => ({
+const sidePanelStyles = makeStyles((theme) => ({
     // Wrapper for the panel
     root: {
         height: '100%',
@@ -47,6 +46,7 @@ const sidePanelStyles = makeStyles(() => ({
         '&>div': {
             position: 'absolute',
             overflowY: 'scroll',
+            overflowX: 'hidden',
             height: '100%',
             width: '100%',
         },
@@ -54,6 +54,16 @@ const sidePanelStyles = makeStyles(() => ({
     // Allow for smaller buttons
     tabButton: {
         minWidth: 0,
+    },
+    test: {
+        width: 50,
+        height: 50,
+        margin: 8,
+        backgroundColor: 'purple',
+        cursor: 'grab',
+        '&:hover': {
+            boxShadow: theme.shadows[8],
+        },
     },
 }));
 
@@ -94,15 +104,10 @@ export default memo(function SidePanel() {
         };
     }, []);
 
-    // Retrieve properties from the global state
-    const sidePanelFluxState = useSelector(
-        (state) => state.user_interface.sidePanel
-    );
-
     // ActiveIndex is the index of the tab currently in view
     const [activeIndex, setActiveIndex] = [
-        sidePanelFluxState.activeTabIndex,
-        useActions(setSidePanelTabIndex),
+        useSelector((state) => state.user_interface.sidePanel.activeTabIndex),
+        useActions(acSetSidePanelTabIndex),
     ];
 
     // Helper function to set active tab on tab click
@@ -117,6 +122,29 @@ export default memo(function SidePanel() {
 
     // Spacing passed to tab panels depends on layout
     const spacing = layout ? 3 : 1;
+
+    // TODO: remove! Temporary for testing drag
+    const triggerStartDrag = useActions(acStartDrag);
+    const onMouseDownHandler = (e, ref, color) => {
+        if (isLeftMouseClick(e) && ref && ref.current) {
+            const { left, top } = ref.current.getBoundingClientRect();
+            const id =
+                Math.random()
+                    .toString(36)
+                    .substring(2, 15) +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 15);
+            triggerStartDrag(color, id, left, top, e.clientX, e.clientY);
+            e.preventDefault();
+        }
+    };
+
+    const redRef = useRef();
+    const blueRef = useRef();
+    const greenRef = useRef();
+    const purpleRef = useRef();
+    const orangeRef = useRef();
 
     // Render the side panel in a tabbed layout
     return (
@@ -160,9 +188,69 @@ export default memo(function SidePanel() {
                 className={classes.panelBody}
             >
                 <TabPanel value={activeIndex} index={0} spacing={spacing}>
-                    <Draggable>
-                        <Card>Item One</Card>
-                    </Draggable>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <div ref={redRef}>
+                            <Card
+                                style={{
+                                    backgroundColor: 'red',
+                                }}
+                                className={classes.test}
+                                onMouseDown={(e) =>
+                                    onMouseDownHandler(e, redRef, 'red')
+                                }
+                            />
+                        </div>
+                        <div ref={blueRef}>
+                            <Card
+                                style={{
+                                    backgroundColor: 'blue',
+                                }}
+                                className={classes.test}
+                                onMouseDown={(e) =>
+                                    onMouseDownHandler(e, blueRef, 'blue')
+                                }
+                            />
+                        </div>
+                        <div ref={greenRef}>
+                            <Card
+                                style={{
+                                    backgroundColor: 'green',
+                                }}
+                                className={classes.test}
+                                onMouseDown={(e) =>
+                                    onMouseDownHandler(e, greenRef, 'green')
+                                }
+                            />
+                        </div>
+                        <div ref={purpleRef}>
+                            <Card
+                                style={{
+                                    backgroundColor: 'purple',
+                                }}
+                                className={classes.test}
+                                onMouseDown={(e) =>
+                                    onMouseDownHandler(e, purpleRef, 'purple')
+                                }
+                            />
+                        </div>
+                        <div ref={orangeRef}>
+                            <Card
+                                style={{
+                                    backgroundColor: 'orange',
+                                }}
+                                className={classes.test}
+                                onMouseDown={(e) =>
+                                    onMouseDownHandler(e, orangeRef, 'orange')
+                                }
+                            />
+                        </div>
+                    </div>
                 </TabPanel>
                 <TabPanel value={activeIndex} index={1} spacing={spacing}>
                     Item Two

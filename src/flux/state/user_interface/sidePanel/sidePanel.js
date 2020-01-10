@@ -15,6 +15,8 @@ export function reducer(state = initialState, action = {}) {
 }
 
 // Action Creators
-export function setSidePanelTabIndex(tabIndex) {
+function acSetSidePanelTabIndex(tabIndex) {
     return { type: SET_TAB_INDEX, payload: tabIndex };
 }
+
+export const actionCreators = { acSetSidePanelTabIndex };

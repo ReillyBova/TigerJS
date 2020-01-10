@@ -1,8 +1,8 @@
 // Libary imports
-import React, { Fragment, createRef, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 // Project imports
-import { computeWindowWidth } from 'utils';
+import { computeWindowWidth, isLeftMouseClick } from 'utils';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -67,10 +67,10 @@ const splitScreenStyles = makeStyles((theme) => ({
 // Measure the visible width of each screen and return the widths as an array
 const computeScreenWidths = (refs) => {
     return refs.map((ref) => {
-        if (!ref || !ref.current) {
+        if (!ref) {
             return 0;
         } else {
-            return ref.current.clientWidth;
+            return ref.clientWidth;
         }
     });
 };
@@ -88,7 +88,7 @@ const setScreenWidths = (
 
     // For each screen...
     refs.forEach((ref, i) => {
-        if (!ref || !ref.current) {
+        if (!ref) {
             // "Continue"
             return;
         } else if (resizeBehaviors[i].isVisible) {
@@ -98,17 +98,17 @@ const setScreenWidths = (
                     ? `${screenWidths[i]}%`
                     : `${screenWidths[i]}px`;
                 // Only rerender if necessary
-                if (ref.current.style.width !== newWidth) {
-                    ref.current.style.width = newWidth;
+                if (ref.style.width !== newWidth) {
+                    ref.style.width = newWidth;
                     triggeredReflow = true;
                 }
             } else {
                 // If visible and FLUID
                 const newFlex = screenWidths[i].toFixed(1);
-                const oldFlex = parseFloat(ref.current.style.flexGrow).toFixed(
+                const oldFlex = parseFloat(ref.style.flexGrow).toFixed(
                     1
                 );
-                const widthCache = ref.current.widthCache;
+                const widthCache = ref.widthCache;
 
                 // Only rerender if necessary
                 if (
@@ -116,11 +116,11 @@ const setScreenWidths = (
                     (oldFlex > 0 || screenWidths[i] > 0)
                 ) {
                     // Normal case, where flexGrow = pixel width
-                    ref.current.style.flexGrow = newFlex;
+                    ref.style.flexGrow = newFlex;
                     triggeredReflow = true;
 
                     if (widthCache) {
-                        delete ref.current.widthCache;
+                        delete ref.widthCache;
                     }
                 } else if (widthCache && isRefresh) {
                     // This screen was just hidden; need to adjust its size
@@ -132,10 +132,10 @@ const setScreenWidths = (
                     });
                     if (totalFluidPixels <= 0) {
                         // This is the only fluid screen, so it can be large
-                        ref.current.style.flexGrow = computeWindowWidth();
+                        ref.style.flexGrow = computeWindowWidth();
                     } else if (widthCache >= 1) {
                         // There was the last fluid screen so it can be anything
-                        ref.current.style.flexGrow = totalFluidPixels;
+                        ref.style.flexGrow = totalFluidPixels;
                     } else {
                         /*
                          * Maintain the percentage of fluid pixels this screen
@@ -144,7 +144,7 @@ const setScreenWidths = (
                          * Total = totalFluidPixels, ratio = widthCache.
                          * Solve for me.
                          */
-                        ref.current.style.flexGrow =
+                        ref.style.flexGrow =
                             (totalFluidPixels * widthCache) /
                             (1.0 - widthCache);
                     }
@@ -155,7 +155,7 @@ const setScreenWidths = (
             // This screen is invisible, BUT (any) visibility state just changed!
             if (!resizeBehaviors[i].isFixed) {
                 // Cache the current width percentage if necessary
-                if (!ref.current.widthCache) {
+                if (!ref.widthCache) {
                     // Save normalized width
                     let totalFluidPixels = 0;
                     screenWidths.forEach((width, j) => {
@@ -166,15 +166,15 @@ const setScreenWidths = (
                     totalFluidPixels -= DIV_WIDTH;
 
                     if (totalFluidPixels <= 0) {
-                        ref.current.widthCache = 1;
+                        ref.widthCache = 1;
                     } else {
-                        ref.current.widthCache = Math.max(
+                        ref.widthCache = Math.max(
                             0.15,
-                            ref.current.style.flexGrow / totalFluidPixels
+                            ref.style.flexGrow / totalFluidPixels
                         );
                     }
                 }
-                ref.current.style.flexGrow = 0;
+                ref.style.flexGrow = 0;
             }
         }
     });
@@ -233,7 +233,10 @@ export default function SplitScreen({ children, emptyMessage }) {
     const resizeBehaviorSignature = JSON.stringify(resizeBehaviors);
 
     // Refs to keep track of screens (and set their CSS)
-    const screenRefs = useRef(screens.map(() => createRef()));
+    const screenRefs = useRef([]);
+    useEffect(() => {
+       screenRefs.current = screenRefs.current.slice(0, screens.length);
+    }, [screens.length]);
 
     // activeSlider is index of the slider being dragged by the user. -1 if none
     const [activeSlider, setActiveSlider] = useState(-1);
@@ -454,7 +457,7 @@ export default function SplitScreen({ children, emptyMessage }) {
                 } else if (
                     isFluidCompressed &&
                     width === 0 &&
-                    !screenRefs.current[i].current.widthCache
+                    !screenRefs.current[i].widthCache
                 ) {
                     // These screens were compressed to zero, so rescale up
                     return winWidth;
@@ -513,7 +516,7 @@ export default function SplitScreen({ children, emptyMessage }) {
                 return (
                     <Fragment key={screen.key}>
                         <div
-                            ref={screenRefs.current[i]}
+                            ref={el => screenRefs.current[i] = el}
                             className={clsx(
                                 resizeBehaviors[i].isFixed
                                     ? classes.screenWrapperFixed
@@ -530,8 +533,10 @@ export default function SplitScreen({ children, emptyMessage }) {
                             isPaneVisible && (
                                 <div
                                     onMouseDown={(e) => {
-                                        setActiveSlider(i);
-                                        e.preventDefault();
+                                        if (isLeftMouseClick(e)) {
+                                            setActiveSlider(i);
+                                            e.preventDefault();
+                                        }
                                     }}
                                     onMouseUp={() => setActiveSlider(-1)}
                                     className={clsx(

@@ -1,7 +1,7 @@
 // Library imports
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 // Local imports
-import { rootReducer } from './state';
+import { rootReducer, middleware } from './state';
 
 // Use redux to generate the store from the rootReducer
-export const store = createStore(rootReducer);
+export const store = createStore(rootReducer, applyMiddleware(...middleware));

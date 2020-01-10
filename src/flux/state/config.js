@@ -1,10 +1,5 @@
-// The initial state of the system
-const initialState = {
-    user_interface: {
-        sidePanel: {
-            activeTabIndex: 0,
-        },
-    },
-};
+// Local imports
+import rootInitialState from '../initialState.js';
 
-export default initialState;
+// Export the rootInitialState
+export default rootInitialState;

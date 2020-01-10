@@ -1,13 +1,16 @@
 // Library imports
 import React, { useState } from 'react';
 // Project imports
-import { Navbar, SidePanel, SplitScreen } from 'components';
+import {
+    DragLayer,
+    ControlPanel,
+    Navbar,
+    SidePanel,
+    SplitScreen,
+} from 'components';
 import ThreeContainer from './ThreeContainer';
 // UI imports
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 
 // Styling for App wrapper
 const appStyles = makeStyles(() => ({
@@ -82,22 +85,11 @@ export default function App() {
                         splitScreenSetState={toggleViz}
                         splitScreenMinShrink={0}
                     />
-                    <Container
+                    <ControlPanel
                         splitScreenIsHidden={!showControl}
                         splitScreenSetState={toggleControl}
                         splitScreenMinShrink={0}
-                        maxWidth='sm'
-                    >
-                        <Box my={4}>
-                            <Typography
-                                variant='h4'
-                                component='h1'
-                                gutterBottom
-                            >
-                                Flow Panel
-                            </Typography>
-                        </Box>
-                    </Container>
+                    />
                     <SidePanel
                         splitScreenIsHidden={!showSide}
                         splitScreenSetState={toggleSide}
@@ -106,6 +98,7 @@ export default function App() {
                     />
                 </SplitScreen>
             </div>
+            <DragLayer />
         </div>
     );
 }
