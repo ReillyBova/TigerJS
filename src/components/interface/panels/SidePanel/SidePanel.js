@@ -42,7 +42,7 @@ const sidePanelStyles = makeStyles((theme) => ({
     },
     panelBody: {
         position: 'relative',
-        flexGrow: 1,
+        flex: 1,
         '&>div': {
             position: 'absolute',
             overflowY: 'scroll',
@@ -62,7 +62,7 @@ const sidePanelStyles = makeStyles((theme) => ({
         backgroundColor: 'purple',
         cursor: 'grab',
         '&:hover': {
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[6],
         },
     },
 }));

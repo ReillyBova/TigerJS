@@ -39,7 +39,7 @@ const sidePanelStyles = makeStyles((theme) => ({
         margin: 8,
         cursor: 'grab',
         '&:hover': {
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[6],
         },
     },
 }));

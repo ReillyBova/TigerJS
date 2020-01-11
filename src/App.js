@@ -22,7 +22,7 @@ const appStyles = makeStyles(() => ({
     },
     // Ensure content below navbar stretches to bottom of the screen
     stretchToBottom: {
-        flexGrow: 1,
+        flex: 1,
     },
 }));
 

@@ -27,9 +27,10 @@ const splitScreenStyles = makeStyles((theme) => ({
     divider: {
         width: DIV_WIDTH,
         flex: 'initial',
+        zIndex: 1,
         backgroundColor:
             theme.palette.type === 'light'
-                ? theme.palette.grey[100]
+                ? theme.palette.grey[400]
                 : theme.palette.grey[900],
         cursor: 'col-resize',
         '&:hover:not(.inActive), &.active': {
