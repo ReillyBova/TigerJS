@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/TigerJS/static/js/main.d640eab0.chunk.js",
-    "main.js.map": "/TigerJS/static/js/main.d640eab0.chunk.js.map",
+    "main.js": "/TigerJS/static/js/main.8d04e9cf.chunk.js",
+    "main.js.map": "/TigerJS/static/js/main.8d04e9cf.chunk.js.map",
     "runtime-main.js": "/TigerJS/static/js/runtime-main.5187010a.js",
     "runtime-main.js.map": "/TigerJS/static/js/runtime-main.5187010a.js.map",
     "static/js/2.85431499.chunk.js": "/TigerJS/static/js/2.85431499.chunk.js",
     "static/js/2.85431499.chunk.js.map": "/TigerJS/static/js/2.85431499.chunk.js.map",
     "index.html": "/TigerJS/index.html",
-    "precache-manifest.70934e9e049961698481b49302135457.js": "/TigerJS/precache-manifest.70934e9e049961698481b49302135457.js",
+    "precache-manifest.6b69923d2f6d0837802156c77f03588d.js": "/TigerJS/precache-manifest.6b69923d2f6d0837802156c77f03588d.js",
     "service-worker.js": "/TigerJS/service-worker.js",
     "static/js/2.85431499.chunk.js.LICENSE": "/TigerJS/static/js/2.85431499.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.5187010a.js",
     "static/js/2.85431499.chunk.js",
-    "static/js/main.d640eab0.chunk.js"
+    "static/js/main.8d04e9cf.chunk.js"
   ]
 }
